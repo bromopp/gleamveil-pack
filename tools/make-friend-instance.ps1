@@ -54,7 +54,20 @@ function Write-PlainText([string] $Text) {
 
 # Prism runs PreLaunchCommand with the working directory set to .minecraft,
 # and expands $INST_JAVA to the instance's own Java binary.
-$preLaunch = '"$INST_JAVA" -jar packwiz-installer-bootstrap.jar -s client ' + $PackUrl
+$preLaunchRaw = '"$INST_JAVA" -jar packwiz-installer-bootstrap.jar -s client ' + $PackUrl
+
+# instance.cfg is read by Qt's QSettings in INI mode. A value that BEGINS with a
+# double quote is parsed as a quoted token, and the whitespace immediately after
+# the closing quote is swallowed -- which silently turned
+#   "$INST_JAVA" -jar ...
+# into
+#   C:/.../javaw.exe-jar ...
+# and the process failed to start with no useful error.
+#
+# Escape the inner quotes and do NOT wrap the value. This is byte-for-byte what
+# Prism itself writes when the same command is entered through its Custom
+# Commands UI, verified against a real instance.
+$preLaunch = $preLaunchRaw -replace '"', '\"'
 
 $instanceCfg = @"
 [General]
