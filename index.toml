@@ -16,6 +16,11 @@ hash = "9c2f7b5021c3784603696199becfbcb2f4ece6fdcd5181a70e7ffa598078766f"
 metafile = true
 
 [[files]]
+file = "mods/carpet-extra.pw.toml"
+hash = "b43d305905e286e56c5e10e87216e66004776a6efc68704aec0ab5656d5ceeeb"
+metafile = true
+
+[[files]]
 file = "mods/carpet.pw.toml"
 hash = "90c94494daa2d49dbacf0809ba7252f4490f17d3383a08ac34b68c3135ff727b"
 metafile = true
@@ -61,8 +66,28 @@ hash = "4300d4eb15f9ac3fc7caaa0324812334a1ea8dacea250ea38770b2e66e5d520b"
 metafile = true
 
 [[files]]
+file = "mods/forge-config-api-port.pw.toml"
+hash = "0efa09e4afbfeb14438e51c1d9545e223a8b3ccbb250a7dfd7031d7bf98ea001"
+metafile = true
+
+[[files]]
+file = "mods/image2map.pw.toml"
+hash = "8651320ce7ca3fa4905794bc2d4b3ab320c4f0317f14f20698dca880910bab48"
+metafile = true
+
+[[files]]
+file = "mods/inventory-sorting.pw.toml"
+hash = "71828bd4b8989530ba42ef68ce7c60920664d44a4e9f1dcac2cd84122d0f0bce"
+metafile = true
+
+[[files]]
 file = "mods/iris.pw.toml"
 hash = "ac758131f830a8034ceff6aee1ecd336c7858421803860fe8ced1a8f7c049971"
+metafile = true
+
+[[files]]
+file = "mods/leaves-be-gone.pw.toml"
+hash = "35890fc9b54016d78c88200df04802f62b3328c27867cd5c0844bfa1b0756fa2"
 metafile = true
 
 [[files]]
@@ -92,7 +117,12 @@ metafile = true
 
 [[files]]
 file = "mods/placeholder-api.pw.toml"
-hash = "90e039173eaaea32bc26077a2710119c1a6f69334f51dcb36c327206b86def70"
+hash = "eb0f1d84df9e6cd57cc2052a7f504cc57b7f8bf326e608a37488f551301e45fd"
+metafile = true
+
+[[files]]
+file = "mods/puzzles-lib.pw.toml"
+hash = "7b81f9a8406ca31053df49f9525d3be67390b3612d8a856273351e9d6a432885"
 metafile = true
 
 [[files]]
@@ -117,5 +147,5 @@ metafile = true
 
 [[files]]
 file = "mods/yacl.pw.toml"
-hash = "9be9cff5b4f3e716d5eac5539f1bdab3c70d16ea2cd8aaf6c85f2c3745a3631a"
+hash = "8096acf70e307aa3f5ce76aa42b03f3d5d32f8e2f01b2f9154b9d71d5a1ea939"
 metafile = true

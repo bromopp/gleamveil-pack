@@ -4,7 +4,7 @@ The mod list for `gleamveil.duckdns.org`, in [packwiz](https://packwiz.infra.lin
 format. Friends import one instance zip, once; after that every launch syncs
 their mods to whatever is in this repo.
 
-Minecraft **1.21.7**, Fabric loader **0.16.14**, 24 mods, all from Modrinth.
+Minecraft **1.21.7**, Fabric loader **0.16.14**, 30 mods, all from Modrinth.
 
 ## For friends
 
@@ -48,10 +48,13 @@ Friends get it on their next launch. Nothing to re-send, no new zip.
 ### Client vs server
 
 Each mod's `side` field decides where it installs — `client`, `server`, or
-`both`. Currently 9 are client-only (Sodium, Iris, Litematica, MiniHUD, MaLiLib,
-Tweakeroo, Mod Menu, Continuity, Borderless Fullscreen) and 15 are `both`.
+`both`. The split is taken from what is actually installed on each end, not from
+Modrinth's advisory `client_side`/`server_side` metadata: **11 client-only, 6
+server-only, 13 both**.
 
-That means the server can install from this same pack, so the two can't drift:
+Installing with `-s client` reproduces the 24 jars in the Prism instance
+exactly; `-s server` reproduces the 19 in the server's `mods` folder exactly.
+So the server installs from this same pack and the two cannot drift:
 
 ```bash
 packwiz-installer-bootstrap.jar -g -s server https://<user>.github.io/gleamveil-pack/pack.toml
@@ -59,6 +62,11 @@ packwiz-installer-bootstrap.jar -g -s server https://<user>.github.io/gleamveil-
 
 Run that in the server directory as part of the start script and the server's
 mods follow the same source of truth as everyone's clients.
+
+Server-only: Carpet Extra, Image2Map, Leaves Be Gone, Inventory Sorting,
+Forge Config API Port, Puzzles Lib.
+Client-only: Sodium, Iris, Litematica, MiniHUD, MaLiLib, Tweakeroo, Mod Menu,
+Continuity, Borderless Fullscreen, YACL, Text Placeholder API.
 
 ### Rebuilding the friend instance zip
 

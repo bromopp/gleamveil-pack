@@ -1,0 +1,13 @@
+name = "Image2Map"
+filename = "image2map-0.10.1+1.21.6.jar"
+side = "server"
+
+[download]
+hash-format = "sha512"
+hash = "a7395093dfeafcd7d4f91240b824b6a0484848ed534eadf0e677e9d0688a0c1d84f96250f761058142846ec61d50dee0cc898dceeb4bc1e673abfdf70b4d0e34"
+url = "https://cdn.modrinth.com/data/13RpG7dA/versions/bJYNHoyD/image2map-0.10.1%2B1.21.6.jar"
+
+[update]
+[update.modrinth]
+mod-id = "13RpG7dA"
+version = "bJYNHoyD"
