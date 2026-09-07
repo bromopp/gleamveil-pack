@@ -36,6 +36,10 @@ if (-not (Test-Path $bootstrap)) {
     Invoke-WebRequest -Uri 'https://github.com/packwiz/packwiz-installer-bootstrap/releases/latest/download/packwiz-installer-bootstrap.jar' -OutFile $bootstrap
 }
 
+# Optional: pre-adds the server to the multiplayer list so friends don't have to
+# type the address. Regenerate with tools/gen-servers-dat.mjs if it changes.
+$serversDat = Join-Path $toolsDir 'servers.dat'
+
 if (-not $OutFile) { $OutFile = Join-Path (Split-Path -Parent $toolsDir) "$Name.zip" }
 
 # Prism reads instance.cfg with QSettings and mmc-pack.json as plain JSON;
@@ -123,6 +127,12 @@ try {
         Add-Bytes 'instance.cfg'   (Write-PlainText $instanceCfg)
         Add-Bytes 'mmc-pack.json'  (Write-PlainText $mmcPack)
         Add-Bytes '.minecraft/packwiz-installer-bootstrap.jar' ([System.IO.File]::ReadAllBytes($bootstrap))
+        if (Test-Path $serversDat) {
+            Add-Bytes '.minecraft/servers.dat' ([System.IO.File]::ReadAllBytes($serversDat))
+            Write-Host "Included servers.dat (server pre-added to the multiplayer list)."
+        } else {
+            Write-Warning "tools/servers.dat missing - friends will have to add the server manually."
+        }
     } finally { $zip.Dispose() }
 } finally { $zipStream.Dispose() }
 
