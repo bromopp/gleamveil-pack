@@ -38,17 +38,21 @@ if (-not (Test-Path $bootstrap)) {
 
 if (-not $OutFile) { $OutFile = Join-Path (Split-Path -Parent $toolsDir) "$Name.zip" }
 
-$stage = Join-Path ([System.IO.Path]::GetTempPath()) "gleamveil-instance-$(Get-Random)"
-$mcDir = Join-Path $stage '.minecraft'
-New-Item -ItemType Directory -Path $mcDir -Force | Out-Null
-
-Copy-Item $bootstrap (Join-Path $mcDir 'packwiz-installer-bootstrap.jar')
+# Prism reads instance.cfg with QSettings and mmc-pack.json as plain JSON;
+# neither tolerates a byte-order mark, and Set-Content -Encoding UTF8 emits one
+# on Windows PowerShell. Write the bytes ourselves instead.
+$utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+function Write-PlainText([string] $Text) {
+    # Extra parens: inside an argument list PowerShell would otherwise read the
+    # -replace operands as separate arguments to GetBytes.
+    $utf8NoBom.GetBytes(($Text -replace "`r`n", "`n"))
+}
 
 # Prism runs PreLaunchCommand with the working directory set to .minecraft,
 # and expands $INST_JAVA to the instance's own Java binary.
 $preLaunch = '"$INST_JAVA" -jar packwiz-installer-bootstrap.jar -s client ' + $PackUrl
 
-@"
+$instanceCfg = @"
 [General]
 ConfigVersion=1.2
 InstanceType=OneSix
@@ -62,15 +66,28 @@ WrapperCommand=
 OverrideMemory=true
 MinMemAlloc=512
 MaxMemAlloc=$MaxMemoryMB
-"@ | Set-Content -Path (Join-Path $stage 'instance.cfg') -Encoding UTF8
+"@
 
-@"
+$mmcPack = @"
 {
     "components": [
         {
             "cachedName": "Minecraft",
             "important": true,
             "uid": "net.minecraft",
+            "version": "$MinecraftVersion"
+        },
+        {
+            "cachedName": "Intermediary Mappings",
+            "cachedRequires": [
+                {
+                    "equals": "$MinecraftVersion",
+                    "uid": "net.minecraft"
+                }
+            ],
+            "cachedVolatile": true,
+            "dependencyOnly": true,
+            "uid": "net.fabricmc.intermediary",
             "version": "$MinecraftVersion"
         },
         {
@@ -86,11 +103,28 @@ MaxMemAlloc=$MaxMemoryMB
     ],
     "formatVersion": 1
 }
-"@ | Set-Content -Path (Join-Path $stage 'mmc-pack.json') -Encoding UTF8
+"@
+
+# Build the zip by hand. Compress-Archive writes backslash separators, which
+# violate the zip spec and are not reliably read back as directories.
+Add-Type -AssemblyName System.IO.Compression
+Add-Type -AssemblyName System.IO.Compression.FileSystem
 
 if (Test-Path $OutFile) { Remove-Item $OutFile }
-Compress-Archive -Path (Join-Path $stage '*') -DestinationPath $OutFile
-Remove-Item $stage -Recurse -Force
+$zipStream = [System.IO.File]::Open($OutFile, [System.IO.FileMode]::CreateNew)
+try {
+    $zip = New-Object System.IO.Compression.ZipArchive($zipStream, [System.IO.Compression.ZipArchiveMode]::Create)
+    try {
+        function Add-Bytes([string] $EntryName, [byte[]] $Bytes) {
+            $entry = $zip.CreateEntry($EntryName, [System.IO.Compression.CompressionLevel]::Optimal)
+            $s = $entry.Open()
+            try { $s.Write($Bytes, 0, $Bytes.Length) } finally { $s.Dispose() }
+        }
+        Add-Bytes 'instance.cfg'   (Write-PlainText $instanceCfg)
+        Add-Bytes 'mmc-pack.json'  (Write-PlainText $mmcPack)
+        Add-Bytes '.minecraft/packwiz-installer-bootstrap.jar' ([System.IO.File]::ReadAllBytes($bootstrap))
+    } finally { $zip.Dispose() }
+} finally { $zipStream.Dispose() }
 
 Write-Host ""
 Write-Host "Built $OutFile" -ForegroundColor Green

@@ -1,0 +1,7 @@
+# Repo files that are not part of the pack — never ship these to players.
+README.md
+.nojekyll
+.gitignore
+.gitattributes
+.packwizignore
+tools/
