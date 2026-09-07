@@ -1,0 +1,121 @@
+hash-format = "sha256"
+
+[[files]]
+file = "mods/architectury-api.pw.toml"
+hash = "9df4c55c24d7c2dd8ea6209fdb5a90aa3cc7760f4bcc60e00b8b02c30d53e86a"
+metafile = true
+
+[[files]]
+file = "mods/beautify-refabricated.pw.toml"
+hash = "16a9412154568283765bab747948708511dd2adc61900316eb6ab5b90b997327"
+metafile = true
+
+[[files]]
+file = "mods/borderless-fullscreen.pw.toml"
+hash = "9c2f7b5021c3784603696199becfbcb2f4ece6fdcd5181a70e7ffa598078766f"
+metafile = true
+
+[[files]]
+file = "mods/carpet.pw.toml"
+hash = "90c94494daa2d49dbacf0809ba7252f4490f17d3383a08ac34b68c3135ff727b"
+metafile = true
+
+[[files]]
+file = "mods/chisel-reborn.pw.toml"
+hash = "4d030d1f8746649fa7414a408a2d9c43b2c43c1e29ba5096bb82b2d2457d4862"
+metafile = true
+
+[[files]]
+file = "mods/cicada.pw.toml"
+hash = "42e55910b396224f773a1d41f85e9d9d8c8df6b1c3b3dea7cb06d972e48e37cf"
+metafile = true
+
+[[files]]
+file = "mods/cloth-config.pw.toml"
+hash = "6087c53f46963011a7a6778383cb1f11bd3b4024bd1645cacffb9b7db7ceb798"
+metafile = true
+
+[[files]]
+file = "mods/continuity.pw.toml"
+hash = "5988b919f3de7402a27037148a11653e69024667751121501caabc97d4697e8e"
+metafile = true
+
+[[files]]
+file = "mods/cryonicconfig.pw.toml"
+hash = "f15fa803f0090eb9786d9357e1ebe27cbd171e848337658935eb4776e09fbbb0"
+metafile = true
+
+[[files]]
+file = "mods/distanthorizons.pw.toml"
+hash = "637012291f586dc61efc5cc4319b2bc69d30fa3dd67ce817d7d31387d32becd6"
+metafile = true
+
+[[files]]
+file = "mods/fabric-api.pw.toml"
+hash = "18583f450e941c49e4be026f7fa620c6a432d06bbf9484b7dc474a1d8f8b622b"
+metafile = true
+
+[[files]]
+file = "mods/factory-blocks.pw.toml"
+hash = "4300d4eb15f9ac3fc7caaa0324812334a1ea8dacea250ea38770b2e66e5d520b"
+metafile = true
+
+[[files]]
+file = "mods/iris.pw.toml"
+hash = "ac758131f830a8034ceff6aee1ecd336c7858421803860fe8ced1a8f7c049971"
+metafile = true
+
+[[files]]
+file = "mods/litematica.pw.toml"
+hash = "a2521a1c2e79854a9a5f40ac06a6f707e2851899ee1a073ab9608d0c3502f1a9"
+metafile = true
+
+[[files]]
+file = "mods/lithium.pw.toml"
+hash = "7ef4890864bbc503ec2da6a1f2f2783a877364b58ffa42dcc339d537a658d611"
+metafile = true
+
+[[files]]
+file = "mods/malilib.pw.toml"
+hash = "2ab89b17e6b4abda4d52ceace16a539e2dc6e4be29909f76b0b4095e592d1e2c"
+metafile = true
+
+[[files]]
+file = "mods/minihud.pw.toml"
+hash = "ebb4415ac8851ac3b2f127416ce612f4afc3462252e602befd8ecb07e2c21743"
+metafile = true
+
+[[files]]
+file = "mods/modmenu.pw.toml"
+hash = "ea4d4d7497176576062664825c8af67f72dd039ca13c63e216ac43a25cd37a7d"
+metafile = true
+
+[[files]]
+file = "mods/placeholder-api.pw.toml"
+hash = "90e039173eaaea32bc26077a2710119c1a6f69334f51dcb36c327206b86def70"
+metafile = true
+
+[[files]]
+file = "mods/rei.pw.toml"
+hash = "c7640fb7535863de8022a025495aee20de9bea1499c684d66e797e8579fa29e9"
+metafile = true
+
+[[files]]
+file = "mods/show-me-your-skin.pw.toml"
+hash = "311ac433d7684853bc27fc141ee09fd5b574c58c8cd59faea47946728d5f2e54"
+metafile = true
+
+[[files]]
+file = "mods/sodium.pw.toml"
+hash = "52d415cfa629ac53087e77a14c099425ab796be3781f83e09486e4313c95f761"
+metafile = true
+
+[[files]]
+file = "mods/tweakeroo.pw.toml"
+hash = "1cb6b5a0bac6aefab624129fd3734aa4c2460bad2d6b343672fe550e795281a3"
+metafile = true
+
+[[files]]
+file = "mods/yacl.pw.toml"
+hash = "9be9cff5b4f3e716d5eac5539f1bdab3c70d16ea2cd8aaf6c85f2c3745a3631a"
+metafile = true
