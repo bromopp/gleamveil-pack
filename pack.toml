@@ -1,13 +1,13 @@
 name = "Gleamveil"
-author = "Bruno"
+author = "Marco"
 version = "1.0.0"
 pack-format = "packwiz:1.1.0"
 
 [index]
 file = "index.toml"
 hash-format = "sha256"
-hash = "7f5e8670c9810011cb19c6fcf91afa791aeed4a666d62077c7380b181dfa7d73"
+hash = "fa2c14473ded3423b4481f9a34610b63bfe08bd433c2c407e751ee70c623f4a3"
 
 [versions]
-fabric = "0.16.14"
-minecraft = "1.21.7"
+fabric = "0.19.5"
+minecraft = "26.2"

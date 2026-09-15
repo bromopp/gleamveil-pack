@@ -1,13 +1,13 @@
 name = "Factory Blocks"
-filename = "factory_blocks-fabric-1.4.0+mc1.21.7.jar"
+filename = "factory_blocks-fabric-1.4.2+mc26.2.jar"
 side = "both"
 
 [download]
+url = "https://cdn.modrinth.com/data/ht0eTMEs/versions/mvdZn9g0/factory_blocks-fabric-1.4.2%2Bmc26.2.jar"
 hash-format = "sha512"
-hash = "8a65000c554bdb8de6f67a168ad3b9989cc049606e7d8161391ed00e3449e5a2d779fb161ae128b81c6ee2600e4be1e18f6ff3c0bc1e91e1b12fb3a184987567"
-url = "https://cdn.modrinth.com/data/ht0eTMEs/versions/dXLalFgL/factory_blocks-fabric-1.4.0%2Bmc1.21.7.jar"
+hash = "1328bd93346bfdbd580c4e58aff5fbf17a8f590b23ff949ab2386f92943bacc755917d6a3e81888ac46e66beee1a32fe719e26a7389f220a6c046f660d306387"
 
 [update]
 [update.modrinth]
 mod-id = "ht0eTMEs"
-version = "dXLalFgL"
+version = "mvdZn9g0"
