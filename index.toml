@@ -11,6 +11,11 @@ hash = "3fdbdeda28c051b65c5dbec8aaeb4468450131c3d226d775813e2dea42d7612e"
 metafile = true
 
 [[files]]
+file = "mods/bobby.pw.toml"
+hash = "28525e4ed9a68f5c60ba6c898144d7382980105cceb40cebf38a7bcffbf5eb71"
+metafile = true
+
+[[files]]
 file = "mods/borderless-fullscreen.pw.toml"
 hash = "b621ff490dadb4501f754e14d4d5d72ac1ac4fedb04c895b18afe0fe5ad90167"
 metafile = true
