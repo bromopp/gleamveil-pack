@@ -1,0 +1,136 @@
+# Build the Prism/MultiMC instance zip from pack.toml and publish it as a
+# release asset, so players always import an instance that matches the pack's
+# current Minecraft and Fabric versions.
+#
+# This replaces exporting the zip by hand from a working instance. That manual
+# step went stale on every version bump, and a stale zip is what makes new
+# players hit the LWJGL mismatch (PrismLauncher#2540: components other than
+# Minecraft and the loader are not re-resolved when the version changes).
+#
+# The download URL players use never changes:
+#   https://github.com/<owner>/<repo>/releases/download/instance/Gleamveil.zip
+#
+# A single rolling tag ("instance") is used on purpose. /releases/latest/ picks
+# the most recently *created* release, which is fragile if any other release is
+# ever cut; a fixed tag in the URL cannot be confused that way. The release is
+# still marked latest as a convenience.
+name: Publish Prism instance zip
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - pack.toml
+      - tools/make-instance-zip.py
+      - .github/workflows/publish-instance.yml
+  # Manual runs always republish - that's how you pick up a new
+  # packwiz-installer-bootstrap release without touching pack.toml.
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-instance
+  cancel-in-progress: false
+
+env:
+  RELEASE_TAG: instance
+  ZIP: Gleamveil.zip
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build the instance zip from pack.toml
+        env:
+          # Derived, never hardcoded: the raw URL of the pack.toml in this very
+          # commit's branch. A fork or a rename keeps working.
+          PACK_URL: https://raw.githubusercontent.com/${{ github.repository }}/${{ github.ref_name }}/pack.toml
+        run: python3 tools/make-instance-zip.py --pack pack.toml --out build
+
+      - name: Read the versions back out of the built zip
+        id: pack
+        run: |
+          set -euo pipefail
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          c = {x["uid"]: x["version"]
+               for x in json.load(open("build/instance/mmc-pack.json"))["components"]}
+          print(f"minecraft={c['net.minecraft']}")
+          print(f"fabric={c['net.fabricmc.fabric-loader']}")
+          PY
+
+      - name: Does the published zip already say the same thing?
+        id: cmp
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Deliberately no `set -e`: a missing release is the normal
+          # first-run case, not a failure.
+          set -uo pipefail
+          changed=true
+          if gh release download "$RELEASE_TAG" --pattern "$ZIP" --dir published 2>/dev/null; then
+            mkdir -p old new
+            # Only the two descriptor files are compared. The bootstrap jar is
+            # re-downloaded every run and would otherwise force a pointless
+            # release whenever packwiz cuts one; use workflow_dispatch for that.
+            unzip -o -q "published/$ZIP" instance.cfg mmc-pack.json -d old
+            unzip -o -q "build/$ZIP"     instance.cfg mmc-pack.json -d new
+            if diff -q old/instance.cfg new/instance.cfg >/dev/null \
+               && diff -q old/mmc-pack.json new/mmc-pack.json >/dev/null; then
+              changed=false
+            fi
+          fi
+          echo "changed=$changed" >> "$GITHUB_OUTPUT"
+          echo "changed=$changed"
+
+      - name: Publish the zip
+        if: steps.cmp.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MC: ${{ steps.pack.outputs.minecraft }}
+          FABRIC: ${{ steps.pack.outputs.fabric }}
+        run: |
+          set -euo pipefail
+          title="Gleamveil instance - Minecraft $MC / Fabric $FABRIC"
+          notes=$(cat <<EOF
+          Prism / MultiMC instance for **Minecraft $MC**, Fabric loader **$FABRIC**.
+
+          Generated from \`pack.toml\` by \`tools/make-instance-zip.py\` on
+          commit \`${GITHUB_SHA::7}\`. This asset is replaced in place on every
+          version bump, so the link below always serves a current instance:
+
+          \`\`\`
+          https://github.com/${GITHUB_REPOSITORY}/releases/download/${RELEASE_TAG}/${ZIP}
+          \`\`\`
+
+          Paste that into Prism Launcher: **Add Instance -> Import from zip**.
+          Mods are fetched at first launch by packwiz-installer, so this zip
+          does not need republishing when a mod is added or updated - only when
+          the Minecraft or Fabric version changes.
+          EOF
+          )
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release edit   "$RELEASE_TAG" --title "$title" --notes "$notes" --latest
+            gh release upload "$RELEASE_TAG" "build/$ZIP" --clobber
+          else
+            gh release create "$RELEASE_TAG" "build/$ZIP" \
+              --target "$GITHUB_SHA" --title "$title" --notes "$notes" --latest
+          fi
+
+      - name: Nothing to publish
+        if: steps.cmp.outputs.changed == 'false' && github.event_name != 'workflow_dispatch'
+        run: |
+          echo "The published instance zip already targets Minecraft" \
+               "${{ steps.pack.outputs.minecraft }} / Fabric" \
+               "${{ steps.pack.outputs.fabric }} - left alone."
+
+      - name: Keep the built zip as a run artifact either way
+        uses: actions/upload-artifact@v4
+        with:
+          name: instance-zip
+          path: build/*.zip
+          if-no-files-found: error
