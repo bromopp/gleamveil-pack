@@ -5,3 +5,10 @@ README.md
 .gitattributes
 .packwizignore
 tools/
+# Keep packwiz's index out of the repo's own plumbing. Without these,
+# `packwiz refresh` indexes the CI workflow and the generator script as if
+# they were pack content, and packwiz-installer then downloads them into every
+# player's .minecraft folder.
+.github/
+build/
+LICENSE
